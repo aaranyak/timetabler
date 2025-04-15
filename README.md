@@ -1,2 +1,3 @@
-# timetabler
-Software for generating timetables
+# Timetabling software for schools
+
+### Probably using genetic algorithms.
