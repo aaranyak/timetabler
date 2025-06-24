@@ -26,3 +26,18 @@ cl_device_id get_usable_gpu() {
     printf("Sorry, a gpu couldn't be loaded\n"); /* Error */
     return 0;
 }
+
+void get_gpu_name(cl_device_id gpu, char name[256]) {
+    /* Get the name of a gpu */
+    size_t name_size; /* Stuff used to get the device name */
+    clGetDeviceInfo(gpu, CL_DEVICE_NAME, 256, name, &name_size); /* Get device name */
+    name[name_size] = 0; /* Add NT */
+}
+
+char *get_program_log(cl_program program, cl_device_id gpu) {
+    /* Get the build log */
+    size_t log_size; clGetProgramBuildInfo(program, gpu, CL_PROGRAM_BUILD_LOG, 0, 0, &log_size); /* Get size */
+    char *log_str = (char*)malloc(log_size); /* Dynamically allocate string */
+    clGetProgramBuildInfo(program, gpu, CL_PROGRAM_BUILD_LOG, log_size, log_str, 0); /* Get data */
+    return log_str;
+}
