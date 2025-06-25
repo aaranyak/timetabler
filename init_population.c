@@ -37,24 +37,28 @@ int init_program(Constraints *constraints, int population, cl_context *context_o
 
     // Compile programs
     char *random_generators_source = load_source_string("random_generators_gpu.c"); /* PRNG, Initialisations, Mutations */
-    const char *sources[1] = {random_generators_source}; /* Array holding all programs */
-    const size_t lengths[1] = {strlen(random_generators_source) - 1}; /* Lengths of all programs */
-    unsigned int num_sources = 1; /* Number of source files that go in the program */
+    char *generation_source = load_source_string("generation_gpu.c"); /* PRNG, Initialisations, Mutations */
+    const char *sources[2] = {random_generators_source, generation_source}; /* Array holding all programs */
+    const size_t lengths[2] = {strlen(random_generators_source) - 1, strlen(generation_source) - 1}; /* Lengths of all programs */
+    unsigned int num_sources = 2; /* Number of source files that go in the program */
     cl_program program = clCreateProgramWithSource(context, num_sources, sources, lengths, &error); /* Create the program */
     if (error != CL_SUCCESS) {
         free(random_generators_source); /* Make sure to do this */
+        free(generation_source); /* Make sure to do this */
         printf("Sorry, couldn't load the program sources\n");
         goto load_sources_error;
     }
     error = clBuildProgram(program, 1, &gpu, "", 0, 0); /* Compeel the program */
     if (error != CL_SUCCESS) { /* If da program failed to compile, register a formal complaint to the great kaktus of the sky for it */
         free(random_generators_source); /* Don't forget this */
+        free(generation_source); /* Make sure to do this */
         printf("Sorry, your gpu code was bad - here is what went wrong\n");
         char *program_log = get_program_log(program, gpu); /* Get da log */
         printf("%s\n", program_log); free(program_log); /* Print it, free it */
         goto create_row_matrix_error; /* Clean up */
     }
     free(random_generators_source); /* Free source strings */
+    free(generation_source); /* Make sure to do this */
     // Matrix Buffers and Seed Tables
 
     int row_pop_size = population * constraints->num_sections * pow(constraints->num_sessions * constraints->num_possible, 2); /* This is the size of the buffer containing row matrices  */

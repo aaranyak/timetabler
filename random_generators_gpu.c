@@ -1,4 +1,4 @@
-/* init_float_buffer_gpu.c, an opencl program that fills a buffer of floats with random numbers */
+/* random_generators_gpu.c has the code for prngs, etc. */
 
 int stateless_prng(unsigned int seed) {
     /* Generates a pseudo-random int using the pcg prng (pcg-random.org) */
