@@ -4,7 +4,7 @@ CFLAGS = -g -Wno-misleading-indentation -Wno-deprecated-declarations -Wall # Com
 LDFLAGS = -lm -lOpenCL# Linker FLags
 NAME = timetabler
 
-OBJECT_FILES = parse_constraints.o opencl_utils.o init_population.o genetic_algorithm.o generation.o # All the object files I want to link
+OBJECT_FILES = parse_constraints.o opencl_utils.o init_population.o genetic_algorithm.o generation.o mutation.o # All the object files I want to link
 
 all: $(NAME) clean # Build tasks
 
@@ -25,6 +25,9 @@ genetic_algorithm.o: genetic_algorithm.c
 
 generation.o: generation.c
 	$(CC) -c -o generation.o $(CFLAGS) generation.c
+
+mutation.o: mutation.c
+	$(CC) -c -o mutation.o $(CFLAGS) mutation.c
 
 .PHONY: clean # Not a real target
 clean: # Cleanup tasks

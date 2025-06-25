@@ -17,3 +17,10 @@ __kernel void init_float_buffer(__global float *buffer, int random_seed) {
     int index = get_global_id(0); /* Get the index that we put this in */
     buffer[index] = (float)stateless_prng(index ^ random_seed) / 4294967295.0; /* I assure you this is random */
 }
+
+__kernel void apply_mutation(__global float *buffer, int random_seed) {
+    /* Applies a mutation to the value in the buffer */
+    int index = get_global_id(0); /* Get the position to index in the buffer */
+    float unbiased = (float)stateless_prng(index ^ random_seed) / 4294967295.0; /* I assure you this is random */
+    buffer[index] += pow(unbiased, 5) / 8; /* Add a bias towards smaller numbers, and increment it by some */
+}
